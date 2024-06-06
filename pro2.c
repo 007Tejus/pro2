@@ -1,100 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
-int main()
-{
-  int i, j, k, m, n, p, q, choice;
-  int *A[3], *B[3], *C[3];
-  printf("enter the order of matrix 1:-\n");
-  scanf("%d %d", &m, &n);
-  printf("enter the order of matrix 2:-\n");
-  scanf("%d %d", &p, &q);
-  for (i = 0; i < m; i++)
-    A[i] = (int *)malloc(n * sizeof(int));
-  for (i = 0; i < p; i++)
-    B[i] = (int *)malloc(q * sizeof(int));
-  printf("enter the elements of matrix 1:-\n");
-  for (i = 0; i < m; i++)
-  {
-    for (j = 0; j < n; j++)
-    {
-      scanf("%d", A[i] + j);
-    }
-  }
-  printf("enter the elements of matrix 2:-\n");
-  for (i = 0; i < p; i++)
-  {
-    for (j = 0; j < q; j++)
-    {
-      scanf("%d", B[i] + j);
-    }
-  }
-  while (1)
-  {
-    printf("\n 1->ADDITION OF TWO MATRIX \n 2->MULTIPLICATION OF TWO MATRIX \n 3->EXIT \n");
-    printf("choose your choice:-\n");
-    scanf("%d", &choice);
+#include <time.h>
 
-    switch (choice)
-    {
-    case 1:
-      if (m != p || n != q)
-      {
-        printf("matrix order mismatch Hence you cannot add them\n");
-      }
-      else
-      {
-        for (i = 0; i < m; i++)
-          C[i] = (int *)malloc(n * sizeof(int));
-        for (i = 0; i < m; i++)
-        {
-          for (j = 0; j < n; j++)
-          {
-            *(C[i] + j) = *(A[i] + j) + *(B[i] + j);
-          }
-        }
-        printf("the resulting matrix is:-\n");
-        for (i = 0; i < m; i++)
-        {
-          for (j = 0; j < n; j++)
-          {
-            printf("\t%d", *(C[i] + j));
-          }
-          printf("\n");
-        }
-      }
-      break;
-    case 2:
-      if (n != p)
-      {
-        printf("matrix order mismatch hence cannot be multiplied\n");
-      }
-      else
-      {
-        for (i = 0; i < m; i++)
-          C[i] = (int *)malloc(q * sizeof(int *));
-        for (i = 0; i < m; i++)
-        {
-          for (j = 0; j < q; j++)
-          {
-            *(C[i] + j) = 0;
-            for (k = 0; k < n; k++)
-            {
-              *(C[i] + j) += *(A[i] + k) * *(B[k] + j);
+void bfs(int a[10][10], int n, int source) {
+    int s[10], q[10], f = 0, r = -1, t, v;
+    for (v = 0; v < n; v++) {
+        s[v] = 0;
+    }
+    q[++r] = source;
+    s[source] = 1;
+    
+    printf("The BFS traversal is:\n");
+    while (f <= r) {
+        t = q[f++];
+        printf("%d ", t);  // Print the node being visited
+        for (v = 0; v < n; v++) {
+            if (a[t][v] == 1 && s[v] == 0) {
+                q[++r] = v;
+                s[v] = 1;
             }
-          }
         }
-        printf("\n the multiplication of two matrix is:-\n");
-        for(i=0;i<m;i++){
-          for(j=0;j<q;j++){
-            printf("\t%d",*(C[i]+j));
-          }
-          printf("\n");
-        }
-      }
-      break;
-
-    case 3: exit(1);  
     }
-  }
-  return 0;
+    printf("\n");
+}
+
+int main() {
+    int a[10][10], n, i, j, s;
+    double clk;
+    clock_t starttime, endtime;
+
+    printf("Enter the number of cities: ");
+    scanf("%d", &n);
+
+    printf("Enter the matrix representation:\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            scanf("%d", &a[i][j]);
+        }
+    }
+
+    printf("Enter the source city: ");
+    scanf("%d", &s);
+
+    starttime = clock();
+    bfs(a, n, s);
+    endtime = clock();
+
+    clk = (double)(endtime - starttime) / CLOCKS_PER_SEC;
+    printf("The run time is %f seconds\n", clk);
+
+    return 0;
 }
